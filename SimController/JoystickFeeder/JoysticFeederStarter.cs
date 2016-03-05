@@ -8,7 +8,7 @@ namespace JoystickFeeder
     {
         private vJoy _joystick;
         private readonly uint _deviceId = 1;
-        private SerialPort _arduinoSerialPsort;
+        private SerialPort _arduinoSerialPort;
 
 
         static void Main(string[] args)
@@ -21,9 +21,9 @@ namespace JoystickFeeder
         {
             _joystick = new vJoy();
 
-            if (CheckVJoy()) return;
+            if (!CheckVJoy()) return;
 
-            if (OpenSerialPort()) return;
+            if (!OpenSerialPort()) return;
 
             _joystick.ResetAll();
 
@@ -34,7 +34,7 @@ namespace JoystickFeeder
         {
             while (true)
             {
-                var line = _arduinoSerialPsort.ReadLine();
+                var line = _arduinoSerialPort.ReadLine();
 
                 HandlePushButton(_deviceId, line, 1, 30);
                 HandlePushButton(_deviceId, line, 2, 31);
@@ -76,7 +76,7 @@ namespace JoystickFeeder
                 pName = Console.ReadLine();
             }
 
-            _arduinoSerialPsort = new SerialPort
+            _arduinoSerialPort = new SerialPort
             {
                 BaudRate = bRate,
                 PortName = pName,
@@ -84,15 +84,15 @@ namespace JoystickFeeder
             };
             try
             {
-                _arduinoSerialPsort.Open();
+                _arduinoSerialPort.Open();
             }
             catch (Exception)
             {
                 Console.WriteLine("Connection failed. Check your port");
                 Console.ReadKey(true);
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace JoystickFeeder
             if (!_joystick.vJoyEnabled())
             {
                 Console.WriteLine("vJoy driver not enabled: Failed Getting vJoy attributes.\n");
-                return true;
+                return false;
             }
 
             // Get the state of the requested device
@@ -119,13 +119,13 @@ namespace JoystickFeeder
                     break;
                 case VjdStat.VJD_STAT_BUSY:
                     Console.WriteLine("vJoy Device {0} is already owned by another feeder\nCannot continue\n", _deviceId);
-                    return true;
+                    return false;
                 case VjdStat.VJD_STAT_MISS:
                     Console.WriteLine("vJoy Device {0} is not installed or disabled\nCannot continue\n", _deviceId);
-                    return true;
+                    return false;
                 default:
                     Console.WriteLine("vJoy Device {0} general error\nCannot continue\n", _deviceId);
-                    return true;
+                    return false;
             }
             // Test if DLL matches the driver
             UInt32 dllVer = 0, drvVer = 0;
@@ -141,10 +141,10 @@ namespace JoystickFeeder
             if ((status == VjdStat.VJD_STAT_OWN) || ((status == VjdStat.VJD_STAT_FREE) && (!_joystick.AcquireVJD(_deviceId))))
             {
                 Console.WriteLine("Failed to acquire vJoy device number {0}.\n", _deviceId);
-                return true;
+                return false;
             }
             Console.WriteLine("Acquired: vJoy device number {0}.\n", _deviceId);
-            return false;
+            return true;
         }
     }
 }
