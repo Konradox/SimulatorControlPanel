@@ -1,0 +1,79 @@
+﻿<controls:MetroWindow x:Class="ArduinoPadDataReciver.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                Title="Arduino as gamepad" 
+                      Height="436" 
+                      Width="700"
+                      GlowBrush="Black"
+                      ResizeMode="CanMinimize"
+                      SaveWindowPosition="True"
+                      TitleCaps="False"
+                      Closing="MainWindow_OnClosing"
+                      >
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="214*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ComboBox Name="CbControl" Grid.Column="1" Margin="2">
+                <ComboBoxItem>Button</ComboBoxItem>
+                <ComboBoxItem>IsSwitch</ComboBoxItem>
+                <ComboBoxItem>Axis</ComboBoxItem>
+            </ComboBox>
+            <Label Grid.Row="0" Grid.Column="0" Content="Control" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Push message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Release message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+
+            <TextBox Name="TbxPushMsg" Grid.Row="1" Grid.Column="1" Margin="1" TextWrapping="Wrap" />
+            <TextBox Name="TbxReleaseMsg" Grid.Row="2" Grid.Column="1" Margin="1" TextWrapping="Wrap" />
+            <Button Name="BtnAdd" Grid.Row="3" Grid.Column="1" Margin="5" Content="Add" Click="BtnAdd_Click" />
+
+
+        </Grid>
+        <Grid Grid.Column="1" Margin="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32*"/>
+                <RowDefinition Height="13*"/>
+            </Grid.RowDefinitions>
+            <ListBox Name="LbxControls" Margin="1" />
+            <Grid Margin="1" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Width="100*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+                <Button Name="BtnStart" Content="Start/Stop" Margin="5,5,5,3" Grid.Row="2" Click="Button_Click" />
+                <Button Content="Remove" Grid.Column="2" Margin="5,5,5,3" Grid.Row="2" Click="Button_Click_1" />
+                <Label Name="LblStarted" Content="Started" Grid.Column="1" Margin="1" Grid.Row="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Visibility="Hidden" Foreground="#FF2DF501"/>
+                <Label Grid.Row="0" Grid.Column="0" Content="Device" Margin="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Baud" Margin="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Label Grid.Row="0" Grid.Column="2" Content="Port" Margin="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <TextBox Name="TbxDevice" Margin="1" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" />
+                <TextBox Name="TbxBaud" Margin="1" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" />
+                <TextBox Name="TbxPort" Margin="1" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" />
+            </Grid>
+        </Grid>
+
+    </Grid>
+</controls:MetroWindow>

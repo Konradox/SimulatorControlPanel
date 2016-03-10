@@ -53,9 +53,9 @@ namespace JoystickFeeder
         /// For example: "301\r"; pin id = 30, state = 1, line end \r</param>
         private void HandlePushButton(uint deviceId, string line, uint button, int pinId)
         {
-            if (line == pinId + "1\r")
+            if (line == string.Format("{0}1\r", pinId))
                 _joystick.SetBtn(true, deviceId, button);
-            if (line == pinId + "0\r")
+            if (line == string.Format("{0}0\r", pinId))
                 _joystick.SetBtn(false, deviceId, button);
         }
 

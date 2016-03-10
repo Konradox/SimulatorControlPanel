@@ -31,9 +31,22 @@ void button(int pin)
   }
 }
 
+void switch2(int pin)
+{
+  state = digitalRead(pin);
+  if (state != prevState[pin - 30])
+  {
+    Serial.println(String(pin) + "1");
+    delay(2);
+    Serial.println(String(pin) + "0");
+    digitalWrite(13,!state);
+    prevState[pin - 30] = state;
+  }
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
-  button(BUTTON_1);
+  switch2(BUTTON_1);
   button(BUTTON_2);
   button(BUTTON_3);
   button(BUTTON_4);
