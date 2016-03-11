@@ -1,11 +1,10 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Xml.Serialization;
 using vJoyInterfaceWrap;
 
 namespace ArduinoPadDataReciver
 {
-    public class JoyButton : JoyControl
+    public class JoySwitch : JoyControl
     {
         [UserScopedSetting]
         [SettingsSerializeAs(SettingsSerializeAs.Xml)]
@@ -22,34 +21,29 @@ namespace ArduinoPadDataReciver
 
         public override void HandleButton(string line, vJoy joystick, uint deviceId)
         {
-            if (line == string.Format("{0}\r", PushMsg))
+            if (line == string.Format("{0}\r", PushMsg) || line == string.Format("{0}\r", ReleaseMsg))
+            {
                 joystick.SetBtn(true, deviceId, Button);
-            if (line == string.Format("{0}\r", ReleaseMsg))
                 joystick.SetBtn(false, deviceId, Button);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pushMsg"></param>
-        /// <param name="releaseMsg"></param>
-        /// <param name="controlType/param>
-        /// <param name="button"></param>
-        public JoyButton(string pushMsg, string releaseMsg, uint button)
-        {
-            PushMsg = pushMsg;
-            ReleaseMsg = releaseMsg;
-            Button = button;
+            }
         }
 
         public override string ToString()
         {
-            return string.Format("Button {0}: push msg: {1}; release msg: {2}", Button, PushMsg, ReleaseMsg);
+            if (string.IsNullOrEmpty(ReleaseMsg))
+                return string.Format("Switch {0}: msg: {1}", Button, PushMsg);
+            return string.Format("Switch {0}: msg1: {1}; msg2: {2}", Button, PushMsg, ReleaseMsg);
         }
 
-        public JoyButton()
+        public JoySwitch()
         {
+        }
 
+        public JoySwitch(string msg1, string msg2, uint button)
+        {
+            Button = button;
+            PushMsg = msg1;
+            ReleaseMsg = msg2;
         }
     }
 }

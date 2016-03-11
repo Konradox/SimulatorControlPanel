@@ -31,14 +31,15 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ComboBox Name="CbControl" Grid.Column="1" Margin="2">
+            <ComboBox Name="CbControl" Grid.Column="1" Margin="2" SelectionChanged="CbControl_SelectionChanged">
                 <ComboBoxItem>Button</ComboBoxItem>
-                <ComboBoxItem>IsSwitch</ComboBoxItem>
-                <ComboBoxItem>Axis</ComboBoxItem>
+                <ComboBoxItem>Switch</ComboBoxItem>
+                <ComboBoxItem>Axis - Encoder</ComboBoxItem>
+                <ComboBoxItem>Axis - Analog</ComboBoxItem>
             </ComboBox>
-            <Label Grid.Row="0" Grid.Column="0" Content="Control" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Push message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="Release message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Name="LblComboBox"  Grid.Row="0" Grid.Column="0" Content="Control" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Name="LblMsg1" Grid.Row="1" Grid.Column="0" Content="Push message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Name="LblMsg2" Grid.Row="2" Grid.Column="0" Content="Release message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
 
             <TextBox Name="TbxPushMsg" Grid.Row="1" Grid.Column="1" Margin="1" TextWrapping="Wrap" />
             <TextBox Name="TbxReleaseMsg" Grid.Row="2" Grid.Column="1" Margin="1" TextWrapping="Wrap" />

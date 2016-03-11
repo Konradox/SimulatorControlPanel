@@ -5,7 +5,7 @@ namespace ArduinoPadDataReciver
 {
     internal class ArduinoReciver
     {
-        private ObservableCollection<JoyButton> _lstJoyButtons;
+        private ObservableCollection<JoyControl> _lstJoyButtons;
         private Joystick _joy;
         private SerialPort _mySerialPort;
 
@@ -15,7 +15,7 @@ namespace ArduinoPadDataReciver
             _joy = new Joystick(1);
         }
 
-        public void Start(ObservableCollection<JoyButton> lstJoyButtons, int baud, int device, string port)
+        public void Start(ObservableCollection<JoyControl> lstJoyButtons, int baud, int device, string port)
         {
             _lstJoyButtons = lstJoyButtons;
             
@@ -33,7 +33,7 @@ namespace ArduinoPadDataReciver
             var sp = (SerialPort)sender;
             string indata = sp.ReadLine();
 
-            foreach (JoyButton button in _lstJoyButtons)
+            foreach (JoyControl button in _lstJoyButtons)
             {
                 _joy.HandlePushButton(button, indata);
             }

@@ -15,7 +15,7 @@ namespace ArduinoPadDataReciver
     public partial class MainWindow
     {
         private readonly ArduinoReciver _ar;
-        private ObservableCollection<JoyButton> _lstJoyButtons;
+        private ObservableCollection<JoyControl> _lstJoyButtons;
         private bool _started = false;
 
         public MainWindow()
@@ -54,11 +54,15 @@ namespace ArduinoPadDataReciver
             CbControl.BorderBrush = Brushes.White;
             if (CbControl.SelectedIndex == 1)
             {
-                _lstJoyButtons.Add(new JoyButton(TbxPushMsg.Text, TbxReleaseMsg.Text, true, (uint)(_lstJoyButtons.Count + 1)));
+                if (string.IsNullOrEmpty(TbxReleaseMsg.Text))
+                    _lstJoyButtons.Add(new JoySwitch(TbxPushMsg.Text, TbxPushMsg.Text, (uint)(_lstJoyButtons.Count + 1)));
+                else
+                    _lstJoyButtons.Add(new JoySwitch(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)(_lstJoyButtons.Count + 1)));
+
             }
             if (CbControl.SelectedIndex == 0)
             {
-                _lstJoyButtons.Add(new JoyButton(TbxPushMsg.Text, TbxReleaseMsg.Text, true, (uint)(_lstJoyButtons.Count + 1)));
+                _lstJoyButtons.Add(new JoyButton(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)(_lstJoyButtons.Count + 1)));
             }
             LbxControls.ItemsSource = _lstJoyButtons;
         }
@@ -76,7 +80,7 @@ namespace ArduinoPadDataReciver
                 TbxPushMsg.BorderBrush = Brushes.Red;
                 validationSucces = false;
             }
-            if (string.IsNullOrEmpty(TbxReleaseMsg.Text))
+            if (string.IsNullOrEmpty(TbxReleaseMsg.Text) && CbControl.SelectedIndex != 1 && CbControl.SelectedIndex != 3)
             {
                 TbxReleaseMsg.BorderBrush = Brushes.Red;
                 validationSucces = false;
@@ -170,22 +174,49 @@ namespace ArduinoPadDataReciver
         {
             if (!string.IsNullOrEmpty(Properties.Settings.Default.ConfiguredButtons))
             {
-                var xs = new XmlSerializer(typeof(ObservableCollection<JoyButton>));
+                var xs = new XmlSerializer(typeof(ObservableCollection<JoyControl>));
                 using (TextReader tr = new StringReader(Properties.Settings.Default.ConfiguredButtons))
                 {
                     try
                     {
-                        _lstJoyButtons = (ObservableCollection<JoyButton>)xs.Deserialize(tr);
+                        _lstJoyButtons = (ObservableCollection<JoyControl>)xs.Deserialize(tr);
                     }
                     catch (Exception)
                     {
-                        _lstJoyButtons = new ObservableCollection<JoyButton>();
+                        _lstJoyButtons = new ObservableCollection<JoyControl>();
                     }
                 }
             }
             else
             {
-                _lstJoyButtons = new ObservableCollection<JoyButton>();
+                _lstJoyButtons = new ObservableCollection<JoyControl>();
+            }
+        }
+
+        private void CbControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            LblMsg2.Visibility = Visibility.Visible;
+            TbxReleaseMsg.Visibility = Visibility.Visible;
+            if (CbControl.SelectedIndex == 0)
+            {
+                LblMsg1.Content = "Push message";
+                LblMsg2.Content = "Release message";
+            }
+            if (CbControl.SelectedIndex == 1)
+            {
+                LblMsg1.Content = "Message 1";
+                LblMsg2.Content = "Message 2 (optional)";
+            }
+            if (CbControl.SelectedIndex == 2)
+            {
+                LblMsg1.Content = "Increment message";
+                LblMsg2.Content = "Decrement message";
+            }
+            if (CbControl.SelectedIndex == 3)
+            {
+                LblMsg1.Content = "Value changed message";
+                LblMsg2.Visibility = Visibility.Hidden;
+                TbxReleaseMsg.Visibility = Visibility.Hidden;
             }
         }
     }

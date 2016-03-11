@@ -25,24 +25,9 @@ namespace ArduinoPadDataReciver
             _joystick.RelinquishVJD(_deviceId);
         }
 
-
-        public void HandlePushButton(JoyButton button, string line)
+        public void HandlePushButton(JoyControl control, string line)
         {
-            if (button.IsSwitch)
-            {
-                if (line == string.Format("{0}\r", button.PushMsg))
-                    _joystick.SetBtn(true, _deviceId, button.Button);
-                if (line == string.Format("{0}\r", button.ReleaseMsg))
-                    _joystick.SetBtn(false, _deviceId, button.Button);
-            }
-            else
-            {
-                if (line == string.Format("{0}\r", button.PushMsg) || line == string.Format("{0}\r", button.ReleaseMsg))
-                {
-                    _joystick.SetBtn(true, _deviceId, button.Button);
-                    _joystick.SetBtn(false, _deviceId, button.Button);
-                }
-            }
+            control.HandleButton(line, _joystick, _deviceId);
         }
 
         /// <summary>
