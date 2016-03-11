@@ -9,7 +9,7 @@
                       ResizeMode="CanMinimize"
                       SaveWindowPosition="True"
                       TitleCaps="False"
-                      Closing="MainWindow_OnClosing"
+                      Closing="MainWindow_OnClosing" Icon="Icon.ico"
                       >
     
     <Grid>
