@@ -70,5 +70,17 @@ namespace ArduinoPadDataReciver.Properties {
                 this["SerialPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FreeButtons {
+            get {
+                return ((string)(this["FreeButtons"]));
+            }
+            set {
+                this["FreeButtons"] = value;
+            }
+        }
     }
 }

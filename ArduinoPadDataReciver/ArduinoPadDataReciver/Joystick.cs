@@ -27,7 +27,7 @@ namespace ArduinoPadDataReciver
 
         public void HandlePushButton(JoyControl control, string line)
         {
-            control.HandleButton(line, _joystick, _deviceId);
+            control.HandleControl(line, _joystick, _deviceId);
         }
 
         /// <summary>

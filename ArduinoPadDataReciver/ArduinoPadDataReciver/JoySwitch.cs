@@ -6,20 +6,7 @@ namespace ArduinoPadDataReciver
 {
     public class JoySwitch : JoyControl
     {
-        [UserScopedSetting]
-        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-        [XmlElement("Button")]
-        public uint Button { get; set; }
-        [UserScopedSetting]
-        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-        [XmlElement("PushMsg")]
-        public string PushMsg { get; set; }
-        [UserScopedSetting]
-        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-        [XmlElement("ReleaseMsg")]
-        public string ReleaseMsg { get; set; }
-
-        public override void HandleButton(string line, vJoy joystick, uint deviceId)
+        public override void HandleControl(string line, vJoy joystick, uint deviceId)
         {
             if (line == string.Format("{0}\r", PushMsg) || line == string.Format("{0}\r", ReleaseMsg))
             {

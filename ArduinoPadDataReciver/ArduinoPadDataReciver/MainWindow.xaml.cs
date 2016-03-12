@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -17,6 +18,7 @@ namespace ArduinoPadDataReciver
         private readonly ArduinoReciver _ar;
         private ObservableCollection<JoyControl> _lstJoyButtons;
         private bool _started = false;
+        private Stack<int> _freeButtonNumbers;
 
         public MainWindow()
         {
@@ -28,6 +30,18 @@ namespace ArduinoPadDataReciver
             TbxPort.Text = Properties.Settings.Default.SerialPort;
             LbxControls.ItemsSource = _lstJoyButtons;
             _ar = new ArduinoReciver();
+            _freeButtonNumbers = new Stack<int>();
+            for (int i = _ar.Buttons(); i > 0; i--)
+            {
+                var add = true;
+                foreach (JoyControl lstJoyButton in _lstJoyButtons)
+                {
+                    if (lstJoyButton.Button == i)
+                        add = false;
+                }
+                if (add)
+                    _freeButtonNumbers.Push(i);
+            }
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
@@ -55,14 +69,14 @@ namespace ArduinoPadDataReciver
             if (CbControl.SelectedIndex == 1)
             {
                 if (string.IsNullOrEmpty(TbxReleaseMsg.Text))
-                    _lstJoyButtons.Add(new JoySwitch(TbxPushMsg.Text, TbxPushMsg.Text, (uint)(_lstJoyButtons.Count + 1)));
+                    _lstJoyButtons.Add(new JoySwitch(TbxPushMsg.Text, TbxPushMsg.Text, (uint)_freeButtonNumbers.Pop()));
                 else
-                    _lstJoyButtons.Add(new JoySwitch(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)(_lstJoyButtons.Count + 1)));
+                    _lstJoyButtons.Add(new JoySwitch(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)_freeButtonNumbers.Pop()));
 
             }
             if (CbControl.SelectedIndex == 0)
             {
-                _lstJoyButtons.Add(new JoyButton(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)(_lstJoyButtons.Count + 1)));
+                _lstJoyButtons.Add(new JoyButton(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)_freeButtonNumbers.Pop()));
             }
             LbxControls.ItemsSource = _lstJoyButtons;
         }
@@ -70,11 +84,11 @@ namespace ArduinoPadDataReciver
         private bool AddValidation()
         {
             bool validationSucces = true;
-            //if (_lstJoyButtons.Count >= _ar.Buttons())
-            //{
-            //    this.ShowMessageAsync("You can't add new button!", "All buttons are in use.");
-            //    return false;
-            //}
+            if (_freeButtonNumbers.Count == 0)
+            {
+                this.ShowMessageAsync("You can't add new button!", "All buttons are in use.");
+                return false;
+            }
             if (string.IsNullOrEmpty(TbxPushMsg.Text))
             {
                 TbxPushMsg.BorderBrush = Brushes.Red;
@@ -153,6 +167,7 @@ namespace ArduinoPadDataReciver
             if (LbxControls.SelectedIndex != -1)
             {
                 var selected = (JoyButton)LbxControls.SelectedItems[0];
+                _freeButtonNumbers.Push((int) selected.Button);
                 _lstJoyButtons.Remove(selected);
             }
         }
