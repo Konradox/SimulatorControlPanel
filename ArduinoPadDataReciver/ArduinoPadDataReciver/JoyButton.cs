@@ -24,6 +24,7 @@ namespace ArduinoPadDataReciver
             PushMsg = pushMsg;
             ReleaseMsg = releaseMsg;
             Button = button;
+            Axis = 0;
         }
 
         public override string ToString()

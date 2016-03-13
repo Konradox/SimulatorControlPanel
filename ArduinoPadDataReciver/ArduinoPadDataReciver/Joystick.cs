@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using vJoyInterfaceWrap;
 
 namespace ArduinoPadDataReciver
@@ -75,5 +77,52 @@ namespace ArduinoPadDataReciver
             _deviceId = (uint) device;
             CheckVJoy();
         }
+
+        public IEnumerable Axes()
+        {
+            var list = new ObservableCollection<string>();
+            int acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_X);
+            if (acticve == 1)
+            {
+                list.Add("X");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_Y);
+            if (acticve == 1)
+            {
+                list.Add("Y");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_Z);
+            if (acticve == 1)
+            {
+                list.Add("Z");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_RX);
+            if (acticve == 1)
+            {
+                list.Add("RX");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_RY);
+            if (acticve == 1)
+            {
+                list.Add("RY");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_RZ);
+            if (acticve == 1)
+            {
+                list.Add("RZ");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_SL0);
+            if (acticve == 1)
+            {
+                list.Add("Slider 0");
+            }
+            acticve = _joystick.GetVJDAxisExist(_deviceId, HID_USAGES.HID_USAGE_SL1);
+            if (acticve == 1)
+            {
+                list.Add("Slider 1");
+            }
+            return list;
+        }
+
     }
 }

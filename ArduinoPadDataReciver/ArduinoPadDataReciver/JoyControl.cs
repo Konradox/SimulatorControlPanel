@@ -6,6 +6,7 @@ namespace ArduinoPadDataReciver
 {
     [XmlInclude(typeof(JoyButton))]
     [XmlInclude(typeof(JoySwitch))]
+    [XmlInclude(typeof(JoyDigitalAxis))]
     public abstract class JoyControl
     {
         [UserScopedSetting]
@@ -20,6 +21,10 @@ namespace ArduinoPadDataReciver
         [SettingsSerializeAs(SettingsSerializeAs.Xml)]
         [XmlElement("ReleaseMsg")]
         public string ReleaseMsg { get; set; }
+        [UserScopedSetting]
+        [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+        [XmlElement("Axis")]
+        public int Axis { get; set; }
 
         public abstract void HandleControl(string line, vJoy joystick, uint deviceId);
     }

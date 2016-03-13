@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Xml.Serialization;
-using vJoyInterfaceWrap;
+﻿using vJoyInterfaceWrap;
 
 namespace ArduinoPadDataReciver
 {
@@ -31,6 +29,7 @@ namespace ArduinoPadDataReciver
             Button = button;
             PushMsg = msg1;
             ReleaseMsg = msg2;
+            Axis = 0;
         }
     }
 }

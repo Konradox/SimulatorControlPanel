@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using MahApps.Metro.Controls.Dialogs;
@@ -17,7 +18,7 @@ namespace ArduinoPadDataReciver
     {
         private readonly ArduinoReciver _ar;
         private ObservableCollection<JoyControl> _lstJoyButtons;
-        private bool _started = false;
+        private bool _started;
         private Stack<int> _freeButtonNumbers;
 
         public MainWindow()
@@ -30,6 +31,17 @@ namespace ArduinoPadDataReciver
             TbxPort.Text = Properties.Settings.Default.SerialPort;
             LbxControls.ItemsSource = _lstJoyButtons;
             _ar = new ArduinoReciver();
+            GetFreeNumbers();
+            GetFreeAxis();
+        }
+
+        private void GetFreeAxis()
+        {
+            CbAxis.ItemsSource = _ar.Axes();
+        }
+
+        private void GetFreeNumbers()
+        {
             _freeButtonNumbers = new Stack<int>();
             for (int i = _ar.Buttons(); i > 0; i--)
             {
@@ -79,6 +91,10 @@ namespace ArduinoPadDataReciver
                 _lstJoyButtons.Add(new JoyButton(TbxPushMsg.Text, TbxReleaseMsg.Text, (uint)_freeButtonNumbers.Pop()));
             }
             LbxControls.ItemsSource = _lstJoyButtons;
+            if (CbControl.SelectedIndex == 2)
+            {
+                _lstJoyButtons.Add(new JoyDigitalAxis(TbxPushMsg.Text, TbxReleaseMsg.Text, CbAxis.SelectedItem as string));
+            }
         }
 
         private bool AddValidation()
@@ -102,6 +118,11 @@ namespace ArduinoPadDataReciver
             if (CbControl.SelectedIndex == -1)
             {
                 CbControl.BorderBrush = Brushes.Red;
+                validationSucces = false;
+            }
+            if ((CbControl.SelectedIndex == 2 || CbControl.SelectedIndex == 3) && CbAxis.SelectedIndex == -1)
+            {
+                CbAxis.BorderBrush = Brushes.Red;
                 validationSucces = false;
             }
 
@@ -166,8 +187,9 @@ namespace ArduinoPadDataReciver
         {
             if (LbxControls.SelectedIndex != -1)
             {
-                var selected = (JoyButton)LbxControls.SelectedItems[0];
-                _freeButtonNumbers.Push((int) selected.Button);
+                var selected = (JoyControl)LbxControls.SelectedItems[0];
+                if (selected.Axis == 0)
+                    _freeButtonNumbers.Push((int) selected.Button);
                 _lstJoyButtons.Remove(selected);
             }
         }
@@ -212,6 +234,9 @@ namespace ArduinoPadDataReciver
         {
             LblMsg2.Visibility = Visibility.Visible;
             TbxReleaseMsg.Visibility = Visibility.Visible;
+            LblAxis.Visibility = Visibility.Hidden;
+            CbAxis.Visibility = Visibility.Hidden;
+            Grid.SetRow(BtnAdd, 3);
             if (CbControl.SelectedIndex == 0)
             {
                 LblMsg1.Content = "Push message";
@@ -226,12 +251,18 @@ namespace ArduinoPadDataReciver
             {
                 LblMsg1.Content = "Increment message";
                 LblMsg2.Content = "Decrement message";
+                Grid.SetRow(BtnAdd, 4);
+                LblAxis.Visibility = Visibility.Visible;
+                CbAxis.Visibility = Visibility.Visible;
             }
             if (CbControl.SelectedIndex == 3)
             {
                 LblMsg1.Content = "Value changed message";
                 LblMsg2.Visibility = Visibility.Hidden;
                 TbxReleaseMsg.Visibility = Visibility.Hidden;
+                Grid.SetRow(BtnAdd, 4);
+                LblAxis.Visibility = Visibility.Visible;
+                CbAxis.Visibility = Visibility.Visible;
             }
         }
     }

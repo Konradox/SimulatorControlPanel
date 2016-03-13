@@ -17,7 +17,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid Margin="1">
+        <Grid Name="GridLeft" Margin="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40*"/>
                 <RowDefinition Height="40*"/>
@@ -40,10 +40,13 @@
             <Label Name="LblComboBox"  Grid.Row="0" Grid.Column="0" Content="Control" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
             <Label Name="LblMsg1" Grid.Row="1" Grid.Column="0" Content="Push message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
             <Label Name="LblMsg2" Grid.Row="2" Grid.Column="0" Content="Release message" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Name="LblAxis" Grid.Row="3" Grid.Column="0" Content="Axis" Margin="1,1,6,1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Visibility="Hidden"/>
 
             <TextBox Name="TbxPushMsg" Grid.Row="1" Grid.Column="1" Margin="1" TextWrapping="Wrap" />
             <TextBox Name="TbxReleaseMsg" Grid.Row="2" Grid.Column="1" Margin="1" TextWrapping="Wrap" />
             <Button Name="BtnAdd" Grid.Row="3" Grid.Column="1" Margin="5" Content="Add" Click="BtnAdd_Click" />
+            <ComboBox Name="CbAxis" Grid.Column="1" Grid.Row="3" Margin="2" SelectionChanged="CbControl_SelectionChanged" Visibility="Hidden">
+            </ComboBox>
 
 
         </Grid>

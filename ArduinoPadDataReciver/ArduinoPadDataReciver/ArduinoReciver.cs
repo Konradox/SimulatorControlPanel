@@ -1,5 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.CodeDom;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.IO.Ports;
+using System.Runtime.InteropServices;
 
 namespace ArduinoPadDataReciver
 {
@@ -30,21 +34,42 @@ namespace ArduinoPadDataReciver
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            var sp = (SerialPort)sender;
-            string indata = sp.ReadLine();
-
-            foreach (JoyControl button in _lstJoyButtons)
+            try
             {
-                _joy.HandlePushButton(button, indata);
+                var sp = (SerialPort) sender;
+                string indata = sp.ReadLine();
+
+                foreach (JoyControl button in _lstJoyButtons)
+                {
+                    _joy.HandlePushButton(button, indata);
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
 
         public void Stop()
         {
-            if (_mySerialPort.IsOpen)
+            for (var i=0; i<5; i++)
             {
-                _mySerialPort.Close();
-                _joy.Stop();
+                try
+                {
+                    if (_mySerialPort.IsOpen)
+                    {
+                        _mySerialPort.Close();
+                        _joy.Stop();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
             }
         }
 
@@ -52,5 +77,11 @@ namespace ArduinoPadDataReciver
         {
             return _joy.MaxButtons();
         }
+
+        public IEnumerable Axes()
+        {
+            return _joy.Axes();
+        }
+
     }
 }
